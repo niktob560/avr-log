@@ -12,7 +12,7 @@ set (CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
 
 
 
-project(scheduler)
+project(avr-log)
 
 
 message(STATUS "Current uploadtool is: ${AVR_UPLOADTOOL}")
@@ -86,19 +86,19 @@ add_definitions("-funsigned-char")
 add_definitions("-funsigned-bitfields")
 add_definitions("-ffunction-sections")
 add_definitions("-c")
-add_definitions("-std=gnu++11")
+add_definitions("-std=gnu++14")
 
 include_directories(Include)
 
 add_avr_executable(
-   scheduler
-   Src/main.cpp Src/schedule.cpp Include/schedule.hpp
+   example-avr-log
+   Src/main.cpp Src/logger.cpp Include/logger.hpp
 )
 
-# add_avr_library(
-#    <library-name>
-#    <sources> <headers>
-# )
+add_avr_library(
+   avr-log
+   Src/logger.cpp Include/logger.hpp
+)
 
 
 
