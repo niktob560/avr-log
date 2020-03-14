@@ -78,8 +78,8 @@ void write(const Type type, const Importance importance, const char *cstr)
 		free(ring[*counter]);
 		
 	
-	ring[*counter] = (char*)malloc(sizeof(char) * (len + 1));	//allocate memory
-	ring[*counter][0] = (type << 5) | (defaultTickFunc() & 0x1F);//put header
+	ring[*counter] = static_cast<char*>(malloc(sizeof(char) * (len + 1)));	//allocate memory
+	ring[*counter][0] = static_cast<char>((type << 5) | (defaultTickFunc() & 0x1F));//put header
 	memcpy(ring[*counter] + 1, cstr, len);//copy log record
 	if(*counter + 1 < getMaxLen(importance))
 		*counter = *counter + 1;
