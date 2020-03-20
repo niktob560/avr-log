@@ -17,12 +17,12 @@ extern size_t	critCount,			//2 bytes
 				optCount;			//2 bytes
 
 									//will be called by Log::dump() functions
-extern 	void 	(*defaultDumpFunc)(char);//2 bytes
+extern 	void 	(*defaultDumpFunc)(const unsigned char*);//2 bytes
 extern 	uint8_t (*defaultTickFunc)(void);//2 bytes
 
-extern char *critLogRing[critRingLen], //arrays of 0-terminated cstrings
-			*impLogRing	[impRingLen],
-			*optLogRing	[optRingLen];
+extern unsigned char 	*critLogRing[critRingLen], //arrays of 0-terminated cstrings
+						*impLogRing	[impRingLen],
+						*optLogRing	[optRingLen];
 
 //Log record must be like
 //<1 byte header>
@@ -110,10 +110,10 @@ void wtf(const Importance importance, const char *cstr);
     *	Function:	dump
     *	Desc:		Dump <importance> log ring to specifyed function
     *	Input:			const Importance importance: 	importance of log ring
-	*					void (*func)(char): 			function that gets logs char-by-char
+	*					void (*func)(unsigned char): 			function that gets logs unsigned char-by-unsigned char
     *	Output:		none
     */
-void dump(const Importance importance, void (*func)(char));
+void dump(const Importance importance, void (*func)(const unsigned char*));
 
    /*
     *	Function:	dump

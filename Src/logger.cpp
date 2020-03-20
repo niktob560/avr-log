@@ -9,16 +9,16 @@ size_t	critCount,				//2 bytes
 		optCount;				//2 bytes
 
 								//will be called by Log::dump() functions
-void (*defaultDumpFunc)(char);	//2 bytes
-uint8_t (*defaultTickFunc)(void);//2 bytes
+void (*defaultDumpFunc)(const unsigned char*);	//2 bytes
+uint8_t (*defaultTickFunc)(void) = []() -> uint8_t {return 0;};//2 bytes
 
 
-char 	*critLogRing[critRingLen], //arrays of 0-terminated cstrings
+unsigned char 	*critLogRing[critRingLen], //arrays of 0-terminated cstrings
 		*impLogRing	[impRingLen],
 		*optLogRing	[optRingLen];
 
 
-constexpr char** getRing(const Importance importance)
+constexpr unsigned char** getRing(const Importance importance)
 {
 	switch (importance)
 	{
@@ -67,20 +67,28 @@ constexpr size_t getMaxLen(const Importance importance)
 
 void write(const Type type, const Importance importance, const char *cstr)
 {
-	char **ring = getRing(importance);
+	unsigned char **ring = getRing(importance);
 	size_t *counter = getCounter(importance);
 	size_t len = 0;
 
-	while (ring[*counter][len])	//count len of log record
+	while (cstr[len])																	//count len of log record
 		len++;
 
-	if(ring[*counter] != 0x00)	//clean memory
+	if(ring[*counter] != 0x00)																	//clean memory
+	{
 		free(ring[*counter]);
-		
+		ring[*counter] = 0x00;
+	}
 	
-	ring[*counter] = static_cast<char*>(malloc(sizeof(char) * (len + 1)));	//allocate memory
-	ring[*counter][0] = static_cast<char>((type << 5) | (defaultTickFunc() & 0x1F));//put header
-	memcpy(ring[*counter] + 1, cstr, len);//copy log record
+	ring[*counter] = static_cast<unsigned char*>(malloc(sizeof(unsigned char) * (len + 1)));	//allocate memory
+	
+	ring[*counter][0] = static_cast<unsigned char>((type << 5) | (defaultTickFunc() & 0x1F));	//put header
+
+	// memcpy(ring[*counter] + 1, cstr, len);														//copy log record
+	for(size_t i = 0; i < len; i++)
+		ring[*counter][i + 1] = cstr[i];
+	
+
 	if(*counter + 1 < getMaxLen(importance))
 		*counter = *counter + 1;
 	else
@@ -121,27 +129,18 @@ void wtf(const Importance importance, const char *cstr)
 }
 
 
-void dump(const Importance importance, void (*func)(char))
+void dump(const Importance importance, void (*func)(const unsigned char*))
 {
-	char **ring = getRing(importance);
+	unsigned char **ring = getRing(importance);
 	size_t counter = *getCounter(importance);
 
 
-	auto print = [ring, func](size_t i)
-	{
-		size_t len = 0;
-		while (ring[i][len])
-		{
-			func(ring[i][len]);
-			len++;
-		}
-		func(0);
-	};
-
 	for(size_t i = counter + 1; i < getMaxLen(importance); i++)
-		print(i);
+		if(ring[i] != 0x00)
+			func(ring[i]);
 	for(size_t i = 0; i < counter; i++)
-		print(i);
+		if(ring[i] != 0x00)
+			func(ring[i]);
 }
 
 
