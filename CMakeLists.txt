@@ -78,6 +78,7 @@ add_definitions("-fshort-enums")
 add_definitions("-Wall")
 add_definitions("-Werror")
 
+add_definitions("-fanalyzer")
 
 
 add_definitions("-pedantic")

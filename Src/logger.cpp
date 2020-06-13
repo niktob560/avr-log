@@ -19,6 +19,9 @@ unsigned char 	*critLogRing[critRingLen], //arrays of 0-terminated cstrings
 
 
 constexpr unsigned char** getRing(const Importance importance)
+__attribute__((returns_nonnull));
+
+constexpr unsigned char** getRing(const Importance importance)
 {
 	switch (importance)
 	{
@@ -29,9 +32,12 @@ constexpr unsigned char** getRing(const Importance importance)
 		case Optional:
 			return optLogRing;
 		default:
-			return NULL;
+			return optLogRing;
 	}
 }
+constexpr size_t* getCounter(const Importance importance)
+__attribute__((returns_nonnull));
+
 
 constexpr size_t* getCounter(const Importance importance)
 {
@@ -44,7 +50,7 @@ constexpr size_t* getCounter(const Importance importance)
 		case Optional:
 			return &optCount;
 		default:
-			return NULL;
+			return &optCount;
 	}
 }
 
@@ -71,9 +77,8 @@ void write(const Type type, const Importance importance, const char *cstr)
 	size_t *counter = getCounter(importance);
 	size_t len = 0;
 
-	while (cstr[len])																	//count len of log record
-		len++;
-
+	len = strlen(cstr);
+	
 	if(ring[*counter] != 0x00)																	//clean memory
 	{
 		free(ring[*counter]);
@@ -93,6 +98,7 @@ void write(const Type type, const Importance importance, const char *cstr)
 		*counter = *counter + 1;
 	else
 		*counter = 0;
+	
 }
 
 void info(const Importance importance, const char *cstr)
@@ -131,9 +137,9 @@ void wtf(const Importance importance, const char *cstr)
 
 void dump(const Importance importance, void (*func)(const unsigned char*))
 {
-	unsigned char **ring = getRing(importance);
-	size_t counter = *getCounter(importance);
 
+	unsigned char **ring = getRing(importance);
+	const size_t counter = *getCounter(importance);
 
 	for(size_t i = counter + 1; i < getMaxLen(importance); i++)
 		if(ring[i] != 0x00)
@@ -141,6 +147,7 @@ void dump(const Importance importance, void (*func)(const unsigned char*))
 	for(size_t i = 0; i < counter; i++)
 		if(ring[i] != 0x00)
 			func(ring[i]);
+	
 }
 
 

@@ -59,7 +59,8 @@ enum Type
 	*					const char *cstr: 				null-terminated string log record
     *	Output:		none
     */
-void write(const Type type, const Importance importance, const char *cstr);
+void write(const Type type, const Importance importance, const char *cstr)
+__attribute__((nonnull(3)));
 
    /*
     *	Function:	info
@@ -68,7 +69,8 @@ void write(const Type type, const Importance importance, const char *cstr);
 	*					const char *cstr: 				null-terminated string log record
     *	Output:		none
     */
-void info(const Importance importance, const char *cstr);
+void info(const Importance importance, const char *cstr)
+__attribute__((nonnull(2)));
 
    /*
     *	Function:	debug
@@ -77,7 +79,8 @@ void info(const Importance importance, const char *cstr);
 	*					const char *cstr: 				null-terminated string log record
     *	Output:		none
     */
-void debug(const Importance importance, const char *cstr);
+void debug(const Importance importance, const char *cstr)
+__attribute__((nonnull(2)));
 
    /*
     *	Function:	warn
@@ -86,7 +89,8 @@ void debug(const Importance importance, const char *cstr);
 	*					const char *cstr: 				null-terminated string log record
     *	Output:		none
     */
-void warn(const Importance importance, const char *cstr);
+void warn(const Importance importance, const char *cstr)
+__attribute__((nonnull(2)));
 
    /*
     *	Function:	err
@@ -95,7 +99,8 @@ void warn(const Importance importance, const char *cstr);
 	*					const char *cstr: 				null-terminated string log record
     *	Output:		none
     */
-void err(const Importance importance, const char *cstr);
+void err(const Importance importance, const char *cstr)
+__attribute__((nonnull(2)));
 
    /*
     *	Function:	wtf
@@ -104,7 +109,8 @@ void err(const Importance importance, const char *cstr);
 	*					const char *cstr: 				null-terminated string log record
     *	Output:		none
     */
-void wtf(const Importance importance, const char *cstr);
+void wtf(const Importance importance, const char *cstr)
+__attribute__((nonnull(2)));
 
    /*
     *	Function:	dump
@@ -113,7 +119,8 @@ void wtf(const Importance importance, const char *cstr);
 	*					void (*func)(unsigned char): 			function that gets logs unsigned char-by-unsigned char
     *	Output:		none
     */
-void dump(const Importance importance, void (*func)(const unsigned char*));
+void dump(const Importance importance, void (*func)(const unsigned char*))
+__attribute__((nonnull(2)));
 
    /*
     *	Function:	dump
