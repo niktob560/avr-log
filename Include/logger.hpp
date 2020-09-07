@@ -81,6 +81,7 @@ __attribute__((nonnull(2)));
     */
 void debug(const Importance importance, const char *cstr)
 __attribute__((nonnull(2)));
+inline void d(const Importance importance, const char *cstr) {debug(importance, cstr);}
 
    /*
     *	Function:	warn
@@ -91,6 +92,7 @@ __attribute__((nonnull(2)));
     */
 void warn(const Importance importance, const char *cstr)
 __attribute__((nonnull(2)));
+inline void w(const Importance importance, const char *cstr) {warn(importance, cstr);}
 
    /*
     *	Function:	err
@@ -101,6 +103,7 @@ __attribute__((nonnull(2)));
     */
 void err(const Importance importance, const char *cstr)
 __attribute__((nonnull(2)));
+inline void e(const Importance importance, const char *cstr) {err(importance, cstr);}
 
    /*
     *	Function:	wtf
